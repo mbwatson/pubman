@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Add Publication</h1>
+    
+    <p>
+        Add your publication by entering its Digital Object Identifier (DOI) below.
+        If you are unsure of the DOI, you can probably lcoate it at <a href="https://search.crossref.org/" target="_blank">https://search.crossref.org</a>.
+    </p>
+
+    <form action="{% url 'pubman:publication.add' %}" method="post">
+
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div>{{ error|escape }}</div>
+                {% endfor %}
+            {% endfor %}
+            
+            {% for error in form.non_field_errors %}
+                <div>{{ error|escape }}</div>
+            {% endfor %}
+        
+        {% endif %}
+        
+        {{ form }}
+        
+        <input type="submit" value="Submit" />
+    
+    </form>
+
+{% endblock content %}

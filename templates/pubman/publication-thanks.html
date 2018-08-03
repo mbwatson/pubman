@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Thanks!</h1>
+    
+    <h2>Your publication has been added</h2>
+    
+    <hr />
+
+    <h3>
+        {{ publication.title }}
+        <a href="https://doi.org/{{ publication.doi }}" target="_blank">{{ publication.doi }}</a>
+    </h3>
+
+    <p>
+        {{ publication.citation }}
+    </p>
+    
+    <br>
+
+    <h2><a href="{% url 'pubman:publication.add' %}">Add Another Publication</a></h2>
+    <h2><a href="{% url 'pubman:publication.list' %}">View Publications</a></h2>
+
+{% endblock content %}

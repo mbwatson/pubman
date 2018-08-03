@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Publications</h1>
+    {% if employee %}
+        <h2>by {{ employee.name }}</h2>
+    {% endif %}
+    {% if publications %}
+    
+        {% for publication in publications %}
+    
+            <h3>
+                {{ publication.title }}
+                <a href="https://doi.org/{{ publication.doi }}" target="_blank">{{ publication.doi }}</a>
+            </h3>
+
+            {% for author in publication.author.all %}
+                {% if author.employee %}
+                    <a href="{% url 'pubman:publication.list_by_author' author.employee.slug %}">{{ author.name }}</a>{% if not forloop.last %},{% endif %}
+                {% else %}
+                    {{ author.name }}{% if not forloop.last %},{% endif %}
+                {% endif %}
+            {% endfor %}
+    
+        {% endfor %}
+    
+    {% else %}
+    
+        <h3>No Publications...yet.</h3>
+    
+    {% endif %}
+
+{% endblock content %}

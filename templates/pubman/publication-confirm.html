@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Confirm Publication</h1>
+    
+    <h2>Is this the publication you were trying to add?</h2>
+    
+    <hr />
+
+    <h3>
+        {{ publication.title }}
+        <a href="https://doi.org/{{ publication.doi }}" target="_blank">{{ publication.doi }}</a>
+    </h3>
+
+    <p>
+        {{ publication.citation }}
+    </p>
+
+    <form action="{% url 'pubman:publication.confirm' %}" method="post">
+        {% csrf_token %}
+        {{ form.doi.as_hidden }}
+        {{ form.title.as_hidden }}
+        {{ form.citation.as_hidden }}
+        <input type="submit" value="Confirm" />
+    </form>
+
+{% endblock content %}
