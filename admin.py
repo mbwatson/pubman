@@ -6,6 +6,10 @@ works = Works()
 
 #
 
+admin.site.site_header = 'Publications Admin'
+
+#
+
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('name', 'employee', 'is_staff')
     
@@ -21,12 +25,12 @@ admin.site.register(Author, AuthorAdmin)
 
 class PublicationAdmin(admin.ModelAdmin):
     list_display = ('doi', 'title')
-    exclude = ('author', 'title', 'citation')
+    exclude = ('authors', 'title', 'citation')
     
     def save_related(self, request, form, formsets, change):
         super(PublicationAdmin, self).save_related(request, form, formsets, change)
         work = works.doi(doi=form.instance.doi)
-        form.instance.author.clear()
+        form.instance.authors.clear()
         for author in work['author']:
             ''' Empty strings given as defaults here becuase we don't know if both
             given and family names are provided.'''
@@ -35,6 +39,6 @@ class PublicationAdmin(admin.ModelAdmin):
                 author = Author.objects.get(name=author_full_name)
             else: 
                 author = Author.objects.create_author(author_full_name)
-            form.instance.author.add(author)
+            form.instance.authors.add(author)
 
 admin.site.register(Publication, PublicationAdmin)
