@@ -12,10 +12,21 @@
         {{ publication.title }}
         <a href="https://doi.org/{{ publication.doi }}" target="_blank">{{ publication.doi }}</a>
     </h3>
-
+    
     <p>
         {{ publication.citation }}
     </p>
+
+     <h4>Authors</h4>
+
+    <form>
+        {% for author in publication.authors %}
+            <div>
+                <input type="radio" name="author" id="{{ author }}">
+                <label for="{{ author }}">{{ author }}</label>
+            </div>
+        {% endfor %}
+    </form>
 
     <form action="{% url 'pubman:publication.confirm' %}" method="post">
         {% csrf_token %}
@@ -26,3 +37,4 @@
     </form>
 
 {% endblock content %}
+
