@@ -35,7 +35,7 @@ class PublicationListByAuthorView(View):
     def get(self, request, staff_slug):
         try:
             publications = Publication.objects.all()
-            publications = publications.filter(author__employee__slug=staff_slug)
+            publications = publications.filter(authors__employee__slug=staff_slug)
             employee = Employee.objects.get(slug=staff_slug)
         except Publication.DoesNotExist:
             publications = []
@@ -59,10 +59,12 @@ class PublicationAddView(View):
             work = works.doi(doi)
             title = work['title'][0]
             citation = fetchCitation(doi)
+            authors = [f'{author.get("given", "")} {author.get("family", "")}' for author in work.get('author')]
             publication = {
                 'doi': doi,
                 'title': title,
                 'citation': citation,
+                'authors': authors,
             }
             form = PublicationConfirmForm(initial=publication)
             context = {
@@ -74,18 +76,16 @@ class PublicationAddView(View):
 
 class PublicationConfirmView(View):
     def get(self, request):
-        context = {}
-        return render(request, 'pubman/publication-confirm.html', context)
+        return render(request, 'pubman/publication-confirm.html', request)
 
     def post(self, request):
         publication = Publication()
         form = PublicationConfirmForm(request.POST)
+        # print(publication.authors)
         if form.is_valid():
             publication = form.save()
-            form = PublicationAddForm()
             context = {
                 'publication': publication,
-                'form': form,
             }
             return render(request, 'pubman/publication-thanks.html', context)
         else:
