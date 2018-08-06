@@ -2,7 +2,8 @@ from django.db import models
 import requests
 from crossref.restful import Works
 works = Works()
-from staff.models import Employee as RelatedEmployeeModel
+from staff.models import Employee
+
 # Authors
 
 class AuthorManager(models.Manager):
@@ -12,7 +13,7 @@ class AuthorManager(models.Manager):
 
 class Author(models.Model):
     name = models.CharField(max_length=127, blank=False, unique=True)
-    employee = models.ForeignKey(RelatedEmployeeModel, null=True, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, null=True, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.name
@@ -35,7 +36,7 @@ class PublicationManager(models.Manager):
 class Publication(models.Model):
     doi = models.CharField(max_length=63, blank=False, unique=True)
     title = models.CharField(max_length=255, blank=True)
-    author = models.ManyToManyField(Author, blank=True)
+    authors = models.ManyToManyField(Author, blank=True)
     citation = models.TextField(blank=True, null=False, default='Unavailable')
 
     def __str__(self):
@@ -43,10 +44,6 @@ class Publication(models.Model):
 
     def __repr__(self):
         return str(self.doi)
-
-    @property
-    def authors(self):
-        return self.author
 
     def fetchCitation(self, citation_format='apa'):
         url = f'https://search.crossref.org/citation?format={citation_format}&doi={self.doi}'
