@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from pubman.models import Publication
-from staff.models import Employee
 from django.views import View
 from .forms import PublicationAddForm, PublicationConfirmForm
 from django.http import HttpResponseRedirect, HttpResponse
@@ -32,17 +31,13 @@ class PublicationListView(View):
         return render(request, 'pubman/publication-list.html', context)
 
 class PublicationListByAuthorView(View):
-    def get(self, request, staff_slug):
+    def get(self, request, author_name):
         try:
             publications = Publication.objects.all()
-            publications = publications.filter(authors__employee__slug=staff_slug)
-            employee = Employee.objects.get(slug=staff_slug)
+            publications = publications.filter(authors__name=author_name)
         except Publication.DoesNotExist:
             publications = []
-        except Employee.DoesNotExist:
-            employee = None
         context = {
-            'employee': employee,
             'publications': publications, 
         }
         return render(request, 'pubman/publication-list.html', context)

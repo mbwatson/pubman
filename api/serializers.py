@@ -4,7 +4,7 @@ from pubman.models import Publication, Author
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ('name', 'is_staff')
+        fields = ('name',)
 
 class PublicationSerializer(serializers.ModelSerializer):
     authors = AuthorSerializer(many=True)

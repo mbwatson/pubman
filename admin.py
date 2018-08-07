@@ -11,7 +11,7 @@ admin.site.site_header = 'Publications Admin'
 #
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'employee', 'is_staff')
+    list_display = ('name',)
     
     def is_staff(self, author):
         return author.is_staff

@@ -2,7 +2,6 @@ from django.db import models
 import requests
 from crossref.restful import Works
 works = Works()
-from staff.models import Employee
 
 # Authors
 
@@ -13,15 +12,9 @@ class AuthorManager(models.Manager):
 
 class Author(models.Model):
     name = models.CharField(max_length=127, blank=False, unique=True)
-    employee = models.ForeignKey(Employee, null=True, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.name
-
-    @property
-    def is_staff(self):
-        return self.employee is not None
-    
+        return self.name    
 
     objects = AuthorManager()
 
