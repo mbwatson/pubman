@@ -37,7 +37,7 @@ class PublicationAdmin(admin.ModelAdmin):
             author_full_name = f'{author.get("given", "")} {author.get("family", "")}'
             if Author.objects.filter(name=author_full_name).exists():
                 author = Author.objects.get(name=author_full_name)
-            else: 
+            else:
                 author = Author.objects.create_author(author_full_name)
             form.instance.authors.add(author)
 

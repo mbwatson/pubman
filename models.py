@@ -45,7 +45,7 @@ class Publication(models.Model):
     def __repr__(self):
         return str(self.doi)
 
-    def fetchCitation(self, citation_format='apa'):
+    def _fetch_citation(self, citation_format='apa'):
         url = f'https://search.crossref.org/citation?format={citation_format}&doi={self.doi}'
         citation = requests.get(url)
         citation.encoding = 'utf-8'
@@ -54,6 +54,6 @@ class Publication(models.Model):
     def save(self, *args, **kwargs):
         work = works.doi(doi=self.doi)
         self.title = work['title'][0]
-        self.citation = self.fetchCitation()
+        self.citation = self._fetch_citation()
         super(Publication, self).save(*args, **kwargs)
 
