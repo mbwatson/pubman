@@ -16,6 +16,8 @@ class AuthorTabularInline(admin.TabularInline):
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('name', 'employee', 'is_staff')
     list_display_links = ('name',)
+    list_filter = ('employee',)
+    search_fields = ('name',)
     list_editable = ('employee',)
     
     class Meta:
