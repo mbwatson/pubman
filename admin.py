@@ -10,9 +10,6 @@ admin.site.site_header = 'Publications Admin'
 
 #
 
-class AuthorTabularInline(admin.TabularInline):
-    model = Author
-
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('name', 'employee', 'is_staff')
     list_display_links = ('name',)
@@ -36,7 +33,9 @@ admin.site.register(Author, AuthorAdmin)
 class PublicationAdmin(admin.ModelAdmin):
     list_display = ('doi', 'title')
     exclude = ('authors', 'title', 'citation')
-    # inlines = [AuthorTabularInline]
+    search_fields = (
+        'title', 'doi', 'authors__employee__last_name' 'authors__employee__first_name'
+    )
 
     class Meta:
         model = Publication

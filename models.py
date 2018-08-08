@@ -13,7 +13,7 @@ class AuthorManager(models.Manager):
 
 class Author(models.Model):
     name = models.CharField(max_length=127, blank=False, unique=True)
-    employee = models.ForeignKey(Employee, null=True, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, null=True, on_delete=models.CASCADE, blank=True)
     
     def __str__(self):
         return self.name
